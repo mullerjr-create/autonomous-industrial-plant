@@ -1,0 +1,26 @@
+services:
+  openplc:
+    image: openplc:v3
+    build:
+      context: ./docker/openplc
+      dockerfile: Dockerfile
+    container_name: openplc-runtime
+    restart: unless-stopped
+    ports:
+      - "502:502"       # Modbus/TCP Industrial Fieldbus
+      - "4840:4840"     # OPC UA Server (ISA-95 L1/L2 Supervisory)
+      - "8080:8080"     # OpenPLC Web UI Dashboard
+    networks:
+      - industrial-network
+    volumes:
+      - openplc-data:/docker_persistent
+
+networks:
+  industrial-network:
+    name: industrial-network
+    driver: bridge
+
+volumes:
+  openplc-data:
+    name: openplc-data
+

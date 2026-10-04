@@ -1,0 +1,18 @@
+# Core OT Protocols and Testing (Phase 1)
+pymodbus>=3.6.0,<3.9.0
+pytest>=8.0.0
+
+# Process Simulation & Physics
+numpy>=1.26.0,<2.1.0
+
+# Data Validation & Schemas
+pydantic>=2.7.0,<3.0.0
+
+# Industrial Protocols & Messaging (Upcoming Phases)
+asyncua>=1.1.0,<1.2.0
+paho-mqtt>=2.0.0,<3.0.0
+
+# API & Platform Services (Upcoming Phases)
+fastapi>=0.111.0,<1.0.0
+uvicorn>=0.30.0,<1.0.0
+
