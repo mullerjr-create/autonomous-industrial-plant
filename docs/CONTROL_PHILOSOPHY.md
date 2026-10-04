@@ -153,3 +153,4 @@ END_IF;
    Actuator coils are active-high. Loss of power or communication drops outputs to `0` (Safe Stopped State).
 3. **Emergency Stop Precedence:**  
    The `emergency_stop` condition is evaluated in every rung, guaranteeing immediate actuator cessation.
+

@@ -188,3 +188,4 @@ Run automated test suites (`tests/test_ot_loop.py`) or AI diagnostic routines wh
 3. Test suite injects synthetic test levels (e.g., 920 mm, 100 mm) and verifies PLC trip times.
 4. Test suite concludes and clears Coil 6 (`test_override = FALSE` on `%QX0.6`).
 5. Simulator resumes autonomous mass balance updates seamlessly.
+
