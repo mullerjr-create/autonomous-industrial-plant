@@ -54,13 +54,14 @@ autonomous-industrial-plant/
 ├── simulator/
 │   ├── __init__.py
 │   └── swat_sim.py                  # SWaT first-principles ODE simulation loop
-├── tests/
-│   ├── __init__.py
-│   └── test_ot_loop.py              # Deterministic OT smoke & interlock test suite
-├── src/                             # Scaffolding for upcoming Phase 2 (Gateway/UNS)
-│   └── __init__.py
 ├── config/                          # Scaffolding for configuration files
-└── docs/                            # Reference documentation and design specs
+├── docs/                            # Reference engineering documentation
+│   ├── PID_SPECIFICATION.md         # Piping & Instrumentation Diagram & ISA-5.1 index
+│   ├── CONTROL_PHILOSOPHY.md        # Functional Design Specification & C&E Matrix
+│   └── STANDARD_OPERATING_PROCEDURES.md # SOP manual for startup, shutdown & alarms
+└── tests/
+    ├── __init__.py
+    └── test_ot_loop.py              # Deterministic OT smoke & interlock test suite
 ```
 
 ---
@@ -99,7 +100,17 @@ autonomous-industrial-plant/
 
 ---
 
-## 4. Step-by-Step Execution Guide
+## 4. Engineering Reference Documentation
+
+For detailed functional specifications, piping layouts, and operational procedures:
+
+- **[Piping & Instrumentation Diagram (P&ID) Specification](docs/PID_SPECIFICATION.md):** Full ANSI/ISA-5.1 schematic, equipment schedule (T101, T201, P101, P102, P201), instrument index, and piping schedule.
+- **[Control Philosophy & Functional Design Specification](docs/CONTROL_PHILOSOPHY.md):** Detailed IEC 61131-3 logic architecture, operating modes, Cause & Effect (C&E) Matrix, safety interlocks, and fail-safe behaviors.
+- **[Standard Operating Procedures (SOP)](docs/STANDARD_OPERATING_PROCEDURES.md):** Formal operational procedures (SOP-001 through SOP-008) for inspection, cold start, steady-state monitoring, shutdown, E-Stop recovery, and HIL testing.
+
+---
+
+## 5. Step-by-Step Execution Guide
 
 ### Step 1: Environment Setup
 Initialize the virtual environment and install pinned dependencies:
