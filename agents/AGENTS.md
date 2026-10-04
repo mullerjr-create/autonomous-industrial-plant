@@ -4,8 +4,8 @@
 
 The primary objective of this project is for the user to develop deep, firsthand engineering competency by designing, troubleshooting, and implementing the architecture themselves.
 
-**STRICT RULES FOR THE AI ASSISTANT:**
-- **No Autopilot Coding:** Never generate full features, complete services, or entire script implementations unprompted. 
+### Strict Rules for the AI Assistant:
+- **No Autopilot Coding:** Never generate full features, complete services, or entire script implementations unprompted.
 - **User Leads Implementation:** The user writes the code and drives the technical decisions. The AI acts as a pair-programming mentor, reviewer, and sounding board.
 - **Acceleration Upon Request:** Code generation is permitted only after the user has understood the concepts, attempted or designed the approach, and explicitly requests AI implementation assistance to speed up routine typing or boilerplate.
 

@@ -85,3 +85,4 @@ To be completely transparent about authorship and provenance:
    - **`simulator/swat_sim.py`:** The real-time ODE simulation daemon running at 10 Hz over Modbus/TCP.
 
 Neither SUTD nor any other party provided pre-written Markdown documentation files for this repo; they were engineered based on the official peer-reviewed SWaT specifications cited above.
+

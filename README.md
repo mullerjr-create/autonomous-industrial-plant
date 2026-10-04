@@ -45,21 +45,27 @@ autonomous-industrial-plant/
 ├── docker-compose.yml               # Docker Compose defining industrial-network & OpenPLC
 ├── requirements.txt                 # Pinned dependencies for Python environment
 ├── swat_control.st                  # Root copy of IEC 61131-3 Structured Text logic
-├── README.md                        # Phase 0 & Phase 1 documentation
+├── agents/
+│   └── AGENTS.md                    # Collaboration rules, active learning directive & persona
+├── config/                          # Scaffolding for configuration files
 ├── docker/
 │   └── openplc/
 │       └── Dockerfile               # Container build recipe for OpenPLC Runtime v3
+├── docs/                            # Reference engineering documentation
+│   ├── architecture/                # Master roadmaps and AI framework specifications
+│   │   ├── Agentic_AI_Industrial_Automation_Framework.md
+│   │   └── Autonomous Industrial Plant.md
+│   ├── PID_SPECIFICATION.md         # Piping & Instrumentation Diagram & ISA-5.1 index
+│   ├── CONTROL_PHILOSOPHY.md        # Functional Design Specification & C&E Matrix
+│   ├── STANDARD_OPERATING_PROCEDURES.md # SOP manual for startup, shutdown & alarms
+│   └── SWAT_REFERENCES.md           # Academic citations, SUTD iTrust DOIs & provenance
 ├── plc/
 │   └── swat_control.st              # IEC 61131-3 control logic source file
 ├── simulator/
 │   ├── __init__.py
 │   └── swat_sim.py                  # SWaT first-principles ODE simulation loop
-├── config/                          # Scaffolding for configuration files
-├── docs/                            # Reference engineering documentation
-│   ├── PID_SPECIFICATION.md         # Piping & Instrumentation Diagram & ISA-5.1 index
-│   ├── CONTROL_PHILOSOPHY.md        # Functional Design Specification & C&E Matrix
-│   ├── STANDARD_OPERATING_PROCEDURES.md # SOP manual for startup, shutdown & alarms
-│   └── SWAT_REFERENCES.md           # Academic citations, SUTD iTrust DOIs & provenance
+├── src/                             # Scaffolding for upcoming Phase 2 (Gateway/UNS)
+│   └── __init__.py
 └── tests/
     ├── __init__.py
     └── test_ot_loop.py              # Deterministic OT smoke & interlock test suite
@@ -105,6 +111,9 @@ autonomous-industrial-plant/
 
 For detailed functional specifications, piping layouts, and operational procedures:
 
+- **[Master Implementation Roadmap](docs/architecture/Autonomous%20Industrial%20Plant.md):** End-to-end multi-phase architecture roadmap (Phase 0 through Phase 5).
+- **[Agentic AI Framework Specification](docs/architecture/Agentic_AI_Industrial_Automation_Framework.md):** Industrial AI framework, Model Context Protocol (MCP), and digital transformation lifecycle.
+- **[Collaboration Rules & Mentorship Framework](agents/AGENTS.md):** Active learning prime directive, non-autopilot coding, and senior engineer persona.
 - **[Piping & Instrumentation Diagram (P&ID) Specification](docs/PID_SPECIFICATION.md):** Full ANSI/ISA-5.1 schematic, equipment schedule (T101, T201, P101, P102, P201), instrument index, and piping schedule.
 - **[Control Philosophy & Functional Design Specification](docs/CONTROL_PHILOSOPHY.md):** Detailed IEC 61131-3 logic architecture, operating modes, Cause & Effect (C&E) Matrix, safety interlocks, and fail-safe behaviors.
 - **[Standard Operating Procedures (SOP)](docs/STANDARD_OPERATING_PROCEDURES.md):** Formal operational procedures (SOP-001 through SOP-008) for inspection, cold start, steady-state monitoring, shutdown, E-Stop recovery, and HIL testing.
