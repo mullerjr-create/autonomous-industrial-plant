@@ -58,7 +58,8 @@ autonomous-industrial-plant/
 ├── docs/                            # Reference engineering documentation
 │   ├── PID_SPECIFICATION.md         # Piping & Instrumentation Diagram & ISA-5.1 index
 │   ├── CONTROL_PHILOSOPHY.md        # Functional Design Specification & C&E Matrix
-│   └── STANDARD_OPERATING_PROCEDURES.md # SOP manual for startup, shutdown & alarms
+│   ├── STANDARD_OPERATING_PROCEDURES.md # SOP manual for startup, shutdown & alarms
+│   └── SWAT_REFERENCES.md           # Academic citations, SUTD iTrust DOIs & provenance
 └── tests/
     ├── __init__.py
     └── test_ot_loop.py              # Deterministic OT smoke & interlock test suite
@@ -107,6 +108,7 @@ For detailed functional specifications, piping layouts, and operational procedur
 - **[Piping & Instrumentation Diagram (P&ID) Specification](docs/PID_SPECIFICATION.md):** Full ANSI/ISA-5.1 schematic, equipment schedule (T101, T201, P101, P102, P201), instrument index, and piping schedule.
 - **[Control Philosophy & Functional Design Specification](docs/CONTROL_PHILOSOPHY.md):** Detailed IEC 61131-3 logic architecture, operating modes, Cause & Effect (C&E) Matrix, safety interlocks, and fail-safe behaviors.
 - **[Standard Operating Procedures (SOP)](docs/STANDARD_OPERATING_PROCEDURES.md):** Formal operational procedures (SOP-001 through SOP-008) for inspection, cold start, steady-state monitoring, shutdown, E-Stop recovery, and HIL testing.
+- **[Academic Provenance & Citations](docs/SWAT_REFERENCES.md):** Peer-reviewed literature citations, SUTD iTrust DOIs, physical testbed specifications, and tag concordance.
 
 ---
 

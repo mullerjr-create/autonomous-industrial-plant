@@ -2,13 +2,23 @@
 **Document ID:** SWaT-DOC-SOP-001  
 **Plant Area:** Stage 1 (Raw Water Infeed) & Stage 2 (Pre-treatment & Dosing)  
 **Applicability:** Plant Operators, OT Engineers, Commissioning Teams, AI Agents  
-**Revision:** 1.0.0  
+**Revision:** 2.0.0 (Peer-Reviewed Critical Evaluation & Ground-Truth Alignment)  
 
 ---
 
-## 1. Document Purpose & Target Audience
+## 1. Document Purpose & Ground-Truth Context
 
-This manual details the standard operating procedures (SOPs) for the safe operation, startup, monitoring, shutdown, and emergency recovery of the SWaT (Secure Water Treatment) simulation coupled with OpenPLC Runtime v3.
+This operational manual details standard operating procedures (SOPs) for the safe operation, startup, monitoring, shutdown, and emergency recovery of the SWaT plant.
+
+### Operating Parameter Benchmark: Physical SUTD Testbed vs. Local Emulation
+
+| Parameter | SUTD Ground-Truth Reference Value | Local Reference Emulation Value | Operational Context |
+| :--- | :--- | :--- | :--- |
+| **T101 Nominal Operating Band** | 500 mm (Low) to 800 mm (High) | 500 mm to 750 mm | SUTD uses 500–800 mm hysteresis band to cycle MV101. |
+| **T101 High-High Cutoff Limit** | 800 mm (valve close) / 1200 mm (emergency) | 900 mm (`raw_tank_hh_limit`) | Overfill prevention threshold. |
+| **T101 Low-Low Permissive Limit**| 250 mm | 150 mm (`raw_tank_ll_limit`) | Pump cavitation and dry-run protection threshold. |
+| **Transfer Pipe Flow Rate** | ~18.9 L/min (~5.0 gpm) | 120 L/min (`FIT201`) | SUTD is a 5 gpm physical pilot plant; emulation is scaled for testing. |
+| **Chemical Quality Setpoint** | pH 7.2 / Conductivity 250 µS/cm | 25.0 ppm (`AIT201`) | Reagent concentration target. |
 
 ---
 
@@ -37,19 +47,19 @@ Ensure Docker container, OpenPLC Runtime, Modbus port, and simulation parameters
    ```bash
    docker compose ps
    ```
-   *Expected:* `openplc-runtime` container status is `Up` and healthy.
+   *Expected:* `openplc-runtime` container status is `Up` and ports `502`, `4840`, `8080` are bound.
 2. **Verify OpenPLC Web UI & Program Status:**
    - Open browser at `http://localhost:8080`.
-   - Log in using administrative credentials (`openplc` / `openplc`).
+   - Log in with credentials (`openplc` / `openplc`).
    - Confirm hardware status indicates **"PLC Status: Running"**.
-   - Verify active program is `swat_control`.
+   - Verify active compiled program is `swat_control`.
 3. **Verify Port Accessibility:**
    - Confirm Modbus/TCP is accepting connections on `127.0.0.1:502`.
    - Confirm OPC UA is accessible on `127.0.0.1:4840`.
 4. **Pre-Start State Verification:**
-   - Emergency Stop (`%QX0.4`) must be `FALSE`.
+   - Master Emergency Stop (`%QX0.4`) must be `FALSE`.
    - Auto-Dosing Mode (`%QX0.5`) must be `TRUE`.
-   - Initial Tank Levels (`%QW0`, `%QW1`) should read within nominal bounds (150 mm < Level < 900 mm).
+   - Initial Tank Levels (`%QW0`, `%QW1`) must read within safe operating band (150 mm < Level < 900 mm).
 
 ---
 
@@ -64,15 +74,15 @@ Safely start continuous water infeed, transfer, and chemical pre-treatment in se
    - Send a momentary pulse (150 ms) to `p101_start_cmd` (`%QX0.0 = TRUE` &rarr; `FALSE`).
    - Verify `p101_run_cmd` (`%QX1.0`) transitions to `TRUE`.
    - Monitor `FIT101` flow reading rises to ~150 L/min.
-   - Observe `LIT101` tank level steadily rising.
+   - Observe `LIT101` tank level steadily rising toward nominal setpoint (500–700 mm).
 2. **Verify Stage 2 Transfer Permissive:**
-   - Verify `LIT101` level has exceeded the Low-Low permissive limit (> 150 mm).
+   - Verify `LIT101` level has exceeded the Low-Low permissive limit (> 150 mm; SUTD benchmark > 250 mm).
    - Verify `alarm_raw_ll` (`%QX1.4`) is `FALSE`.
-   - Verify Stage 2 tank `T201` is below High-High limit (< 950 mm).
+   - Verify receiving tank `T201` is below High-High cutoff limit (< 950 mm).
 3. **Initiate Stage 2 Transfer & Chemical Dosing:**
    - Send a momentary pulse (150 ms) to `p102_start_cmd` (`%QX0.2 = TRUE` &rarr; `FALSE`).
    - Verify `p102_run_cmd` (`%QX1.1`) transitions to `TRUE`.
-   - Verify `p201_run_cmd` (`%QX1.2`) auto-starts in lockstep via auto-pacing.
+   - Verify `p201_run_cmd` (`%QX1.2`) auto-starts in lockstep via auto-pacing mode.
    - Verify `FIT201` flow reading rises to ~120 L/min.
    - Verify `AIT201` chemical concentration stabilizes around 25.0 ppm.
 
@@ -84,20 +94,20 @@ Safely start continuous water infeed, transfer, and chemical pre-treatment in se
 Maintain optimal water levels, flow dynamics, and chemical dosing during continuous operations.
 
 ### Nominal Parameter Band
-| Parameter | Tag | Nominal Value | Safe Operating Band | Action if Outside Band |
+| Parameter | Tag | Local Nominal Value | SUTD Research Benchmark | Action if Outside Band |
 | :--- | :--- | :--- | :--- | :--- |
-| **Raw Water Tank Level** | `LIT101` | 500 – 750 mm | 200 – 850 mm | Cycle P101 to maintain buffer |
-| **Stage 2 Tank Level** | `LIT201` | 300 – 700 mm | 150 – 900 mm | Balance P102 with downstream demand |
-| **Raw Inflow Rate** | `FIT101` | 150 L/min | 140 – 160 L/min (P101 ON) | Check P101 strainer if flow drops |
-| **Transfer Flow Rate** | `FIT201` | 120 L/min | 110 – 130 L/min (P102 ON) | Check P102 discharge line |
-| **Chemical Concentration**| `AIT201` | 25.0 ppm | 20.0 – 30.0 ppm | Verify P201 dosing stroke / chemical stock |
+| **Raw Water Tank Level** | `LIT101` | 500 – 750 mm | 500 – 800 mm | Cycle P101 to maintain buffer |
+| **Receiving Tank Level** | `LIT201` | 300 – 700 mm | *Monitored at T301 (500–800 mm)*| Balance P102 with downstream demand |
+| **Raw Inflow Rate** | `FIT101` | 150 L/min | ~18.9 L/min (~5 gpm) | Check infeed strainer if flow drops |
+| **Transfer Flow Rate** | `FIT201` | 120 L/min | ~18.9 L/min (~5 gpm) | Check P102 discharge line |
+| **Chemical Concentration**| `AIT201` | 25.0 ppm | 250 µS/cm / pH 7.2 | Verify P201 dosing stroke / stock drum |
 
 ---
 
 ## SOP-004: Normal Plant Shutdown Sequence
 
 ### Objective
-Perform controlled, orderly cessation of fluid transfer and dosing.
+Perform controlled, hazard-free cessation of fluid transfer and dosing.
 
 ### Procedure Steps
 1. **Halt Transfer & Chemical Dosing (Stage 2):**
@@ -122,10 +132,10 @@ Execute immediate shutdown during dangerous plant conditions and recover safely.
 
 ### 1. E-Stop Activation
 - Write `TRUE` to `emergency_stop` (`%QX0.4 = TRUE`).
-- **Immediate Outcome (< 100 ms):** OpenPLC forces `P101`, `P102`, and `P201` to `FALSE`. All start commands are disabled.
+- **Immediate Outcome (< 100 ms):** OpenPLC forces `P101`, `P102`, and `P201` to `FALSE`. All start commands are inhibited.
 
 ### 2. Post-Trip Investigation & Clearance
-- Identify trip cause (mechanical fault, piping leak, severe instrument error).
+- Identify trip cause (mechanical fault, piping leak, severe instrument error, or simulated cyber-attack).
 - Once physical safety is confirmed, reset `emergency_stop` coil to `FALSE` (`%QX0.4 = FALSE`).
 - *Note: Pumps will NOT restart automatically upon E-Stop release.*
 - Re-prime the plant following **SOP-002 (Normal Plant Startup Sequence)**.
@@ -143,7 +153,7 @@ Execute immediate shutdown during dangerous plant conditions and recover safely.
 
 ### Operator Actions
 1. Confirm `P101` has stopped and `FIT101` reads 0 L/min.
-2. Run Transfer Pump `P102` (if downstream vessel `T201` has capacity) to draw down `T101`.
+2. Run Transfer Pump `P102` (if destination tank has capacity) to draw down `T101`.
 3. Once level drops below 900 mm, `alarm_raw_hh` automatically resets to `FALSE`.
 4. Issue a start pulse on `p101_start_cmd` only after the level drops to nominal operating range (< 800 mm).
 
